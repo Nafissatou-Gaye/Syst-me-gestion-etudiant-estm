@@ -4,7 +4,11 @@ class Config:
     """Configuration de base pour l'application Flask"""
     
     # Clé secrète pour les sessions et CSRF
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'votre-cle-secrete-super-secure-changez-moi'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    if not SECRET_KEY:
+        raise RuntimeError(
+            "La variable d'environnement SECRET_KEY doit être définie pour sécuriser les sessions et la protection CSRF."
+        )
     
     # Configuration de la base de données SQLite
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///gestion_etudiants.db'
