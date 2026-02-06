@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="mb-4">{{ titre }}</h1>
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label class="form-label">Nom de la classe *</label>
+                {{ form.nom(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Filière</label>
+                {{ form.filiere_id(class="form-select") }}
+            </div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Enregistrer</button>
+            <a href="{{ url_for('admin.liste_classes') }}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

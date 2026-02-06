@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <h1><i class="fas fa-graduation-cap"></i> Filières</h1>
+    <a href="{{ url_for('admin.ajouter_filiere') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter</a>
+</div>
+{% if filieres %}
+<table class="table">
+    <thead><tr><th>Nom</th><th>Niveau</th><th>Année</th></tr></thead>
+    <tbody>
+        {% for f in filieres %}<tr><td>{{ f.nom }}</td><td><span class="badge bg-info">{{ f.niveau }}</span></td><td>{{ f.annee }}</td></tr>{% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

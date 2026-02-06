@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1><i class="fas fa-users"></i> Liste des Étudiants</h1>
+{% if etudiants %}
+<table class="table table-hover">
+    <thead><tr><th>Matricule</th><th>Nom</th><th>Prénom</th><th>Classe</th><th>Notes</th></tr></thead>
+    <tbody>
+        {% for e in etudiants %}
+        <tr>
+            <td>{{ e.matricule }}</td>
+            <td>{{ e.nom }}</td>
+            <td>{{ e.prenom }}</td>
+            <td>{{ e.classe.nom if e.classe else '-' }}</td>
+            <td><span class="badge bg-info">{{ e.notes|length }} notes</span></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}

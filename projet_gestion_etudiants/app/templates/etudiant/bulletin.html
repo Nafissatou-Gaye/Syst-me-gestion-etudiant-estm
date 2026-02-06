@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between mb-4">
+    <h1><i class="fas fa-file-alt"></i> Mon Bulletin</h1>
+    <a href="{{ url_for('etudiant.bulletin_pdf') }}" class="btn btn-danger"><i class="fas fa-file-pdf"></i> Télécharger PDF</a>
+</div>
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>Informations</h5>
+        <p><strong>Nom:</strong> {{ etudiant.nom }}<br>
+        <strong>Prénom:</strong> {{ etudiant.prenom }}<br>
+        <strong>Matricule:</strong> {{ etudiant.matricule }}<br>
+        <strong>Classe:</strong> {{ etudiant.classe.nom if etudiant.classe else '-' }}</p>
+    </div>
+</div>
+<table class="table">
+    <thead><tr><th>Matière</th><th>Coefficient</th><th>Moyenne</th><th>Crédits</th><th>Validation</th></tr></thead>
+    <tbody>
+        {% for matiere_nom, data in notes_par_matiere.items() %}
+        <tr>
+            <td>{{ matiere_nom }}</td>
+            <td>{{ data.matiere.coefficient }}</td>
+            <td><strong class="{{ 'text-success' if data.moyenne >= 10 else 'text-danger' }}">{{ data.moyenne }}/20</strong></td>
+            <td>{{ data.matiere.credit if data.valide else 0 }}/{{ data.matiere.credit }}</td>
+            <td>{% if data.valide %}<span class="badge bg-success">Validé</span>{% else %}<span class="badge bg-danger">Non validé</span>{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="alert alert-info">
+    <strong>Moyenne générale:</strong> {{ moyenne_generale if moyenne_generale else 'N/A' }}/20<br>
+    <strong>Crédits validés:</strong> {{ credits_valides }}/60
+</div>
+{% endblock %}

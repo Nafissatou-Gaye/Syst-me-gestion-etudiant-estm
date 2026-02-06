@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ titre }}</h1>
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3"><label>Étudiant *</label>{{ form.etudiant_id(class="form-select") }}</div>
+            <div class="mb-3"><label>Matière *</label>{{ form.matiere_id(class="form-select") }}</div>
+            <div class="row">
+                <div class="col-md-6 mb-3"><label>Note (0-20) *</label>{{ form.valeur(class="form-control", step="0.01") }}</div>
+                <div class="col-md-6 mb-3"><label>Type d'évaluation</label>{{ form.type_evaluation(class="form-select") }}</div>
+            </div>
+            <div class="mb-3"><label>Commentaire</label>{{ form.commentaire(class="form-control", rows=3) }}</div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ url_for('enseignant.liste_notes') }}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

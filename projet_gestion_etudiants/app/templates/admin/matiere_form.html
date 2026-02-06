@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>{{ titre }}</h1>
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label>Nom de la matière *</label>
+                {{ form.nom(class="form-control") }}
+            </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label>Coefficient *</label>
+                    {{ form.coefficient(class="form-control") }}
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label>Crédits *</label>
+                    {{ form.credit(class="form-control") }}
+                </div>
+            </div>
+            <div class="mb-3">
+                <label>Description</label>
+                {{ form.description(class="form-control", rows=3) }}
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer</button>
+            <a href="{{ url_for('admin.liste_matieres') }}" class="btn btn-secondary">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

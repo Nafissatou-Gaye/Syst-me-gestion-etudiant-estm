@@ -1,0 +1,192 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Gestion Étudiants{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">
+    <i class="fas fa-tachometer-alt"></i> Dashboard
+    <span class="badge badge-{{ current_user.role }} float-end">{{ current_user.role|capitalize }}</span>
+</h1>
+
+<div class="alert alert-success mb-4">
+    <i class="fas fa-user-circle"></i> 
+    Bienvenue <strong>{{ current_user.prenom }} {{ current_user.nom }}</strong> !
+</div>
+
+{% if current_user.role == 'admin' %}
+<!-- Dashboard Administrateur -->
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-3x mb-3"></i>
+                <h3>{{ total_etudiants }}</h3>
+                <p>Étudiants</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <i class="fas fa-school fa-3x mb-3"></i>
+                <h3>{{ total_classes }}</h3>
+                <p>Classes</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <i class="fas fa-book fa-3x mb-3"></i>
+                <h3>{{ total_matieres }}</h3>
+                <p>Matières</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                <h3>{{ total_notes }}</h3>
+                <p>Notes enregistrées</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="mb-3"><i class="fas fa-tasks"></i> Actions rapides</h3>
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ url_for('admin.ajouter_etudiant') }}" class="btn btn-primary">
+                <i class="fas fa-user-plus"></i> Ajouter un étudiant
+            </a>
+            <a href="{{ url_for('admin.ajouter_classe') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Ajouter une classe
+            </a>
+            <a href="{{ url_for('admin.ajouter_matiere') }}" class="btn btn-info">
+                <i class="fas fa-plus"></i> Ajouter une matière
+            </a>
+            <a href="{{ url_for('admin.liste_utilisateurs') }}" class="btn btn-secondary">
+                <i class="fas fa-users-cog"></i> Gérer les utilisateurs
+            </a>
+        </div>
+    </div>
+</div>
+
+{% elif current_user.role == 'enseignant' %}
+<!-- Dashboard Enseignant -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <i class="fas fa-users fa-3x mb-3"></i>
+                <h3>{{ total_etudiants }}</h3>
+                <p>Étudiants</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <i class="fas fa-clipboard-list fa-3x mb-3"></i>
+                <h3>{{ total_notes }}</h3>
+                <p>Notes saisies</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3 class="mb-3"><i class="fas fa-tasks"></i> Actions rapides</h3>
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ url_for('enseignant.ajouter_note') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-plus"></i> Ajouter une note
+            </a>
+            <a href="{{ url_for('enseignant.liste_notes') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-list"></i> Voir toutes les notes
+            </a>
+            <a href="{{ url_for('enseignant.liste_etudiants') }}" class="btn btn-info btn-lg">
+                <i class="fas fa-users"></i> Liste des étudiants
+            </a>
+        </div>
+    </div>
+</div>
+
+{% elif current_user.role == 'etudiant' %}
+<!-- Dashboard Étudiant -->
+{% if etudiant %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <i class="fas fa-chart-line fa-3x mb-3"></i>
+                <h3>{{ moyenne_generale if moyenne_generale else 'N/A' }}</h3>
+                <p>Moyenne Générale</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <i class="fas fa-medal fa-3x mb-3"></i>
+                <h3>{{ credits_valides }}/60</h3>
+                <p>Crédits Validés</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body text-center">
+                <i class="fas fa-clipboard-check fa-3x mb-3"></i>
+                <h3>{{ total_notes }}</h3>
+                <p>Notes enregistrées</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title"><i class="fas fa-id-card"></i> Informations personnelles</h5>
+                <p><strong>Matricule:</strong> {{ etudiant.matricule }}</p>
+                <p><strong>Classe:</strong> {{ etudiant.classe.nom if etudiant.classe else 'Non assigné' }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <h3 class="mb-3"><i class="fas fa-tasks"></i> Actions rapides</h3>
+        <div class="d-grid gap-2 d-md-flex">
+            <a href="{{ url_for('etudiant.mes_notes') }}" class="btn btn-primary btn-lg">
+                <i class="fas fa-book"></i> Consulter mes notes
+            </a>
+            <a href="{{ url_for('etudiant.bulletin') }}" class="btn btn-success btn-lg">
+                <i class="fas fa-file-alt"></i> Voir mon bulletin
+            </a>
+            <a href="{{ url_for('etudiant.bulletin_pdf') }}" class="btn btn-danger btn-lg">
+                <i class="fas fa-file-pdf"></i> Télécharger PDF
+            </a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    <i class="fas fa-exclamation-triangle"></i> 
+    Aucun profil étudiant trouvé. Veuillez contacter l'administrateur.
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

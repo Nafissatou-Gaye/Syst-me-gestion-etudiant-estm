@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<h1><i class="fas fa-book"></i> Mes Notes</h1>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card text-white bg-primary">
+            <div class="card-body text-center">
+                <h3>{{ moyenne_generale if moyenne_generale else 'N/A' }}/20</h3>
+                <p>Moyenne Générale</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card text-white bg-success">
+            <div class="card-body text-center">
+                <h3>{{ credits_valides }}/60</h3>
+                <p>Crédits Validés</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% for matiere_nom, data in notes_par_matiere.items() %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h5>{{ matiere_nom }} - Moyenne: <strong class="{{ 'text-success' if data.moyenne >= 10 else 'text-danger' }}">{{ data.moyenne }}/20</strong></h5>
+        <small>Coefficient: {{ data.matiere.coefficient }} | Crédits: {{ data.matiere.credit }}</small>
+    </div>
+    <div class="card-body">
+        <table class="table table-sm">
+            <thead><tr><th>Note</th><th>Type</th><th>Date</th></tr></thead>
+            <tbody>
+                {% for note in data.notes %}
+                <tr><td>{{ note.valeur }}/20</td><td>{{ note.type_evaluation or '-' }}</td><td>{{ note.date_ajout.strftime('%d/%m/%Y') }}</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}
